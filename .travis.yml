@@ -1,0 +1,23 @@
+language: c
+
+before_install:
+  - wget http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitARMupdate.pl
+  - wget http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitA64update.pl
+
+install:
+  - sudo perl devkitARMupdate.pl
+  - sudo perl devkitA64update.pl
+
+before_script:
+  - export DEVKITPRO=/home/travis/devkitPro
+  - export DEVKITARM=${DEVKITPRO}/devkitARM
+  - export CPPFLAGS=-DI_KNOW_WHAT_I_AM_DOING 
+  - export MAKEFLAGS="-j $(grep -c ^processor /proc/cpuinfo)"
+
+script:
+  - make clean
+  - make
+
+cache:
+  directories:
+  - /home/travis/devkitPro
